@@ -110,14 +110,70 @@ BEGIN
 end;
 
 
-
-
-
-
-
-
-
 insert into tabla1 
 values (1,'Nombre1') 
 
 GO
+
+
+
+
+
+--___________________________________________________________________________________________
+
+
+
+CREATE PROCEDURE GestionarVenta(
+    IN p_product_id INT,
+    IN p_quantity INT,
+    IN p_customer_id VARCHAR(5),
+    IN p_order_date DATE,
+    IN p_ship_address VARCHAR(60),
+    IN p_ship_city VARCHAR(15),
+    IN p_ship_postal_code VARCHAR(10),
+    IN p_ship_country VARCHAR(15)
+)
+BEGIN
+    DECLARE v_stock_actual INT;
+    DECLARE v_order_id INT;
+
+    -- Verificar el stock actual del producto
+    SELECT UnitsInStock INTO v_stock_actual
+    FROM Products
+    WHERE ProductID = p_product_id;
+
+    -- Verificar si el stock es suficiente
+    IF v_stock_actual >= p_quantity THEN
+        -- Insertar la orden en la tabla Orders
+        INSERT INTO Orders (CustomerID, OrderDate, ShipAddress, ShipCity, ShipPostalCode, ShipCountry)
+        VALUES (p_customer_id, p_order_date, p_ship_address, p_ship_city, p_ship_postal_code, p_ship_country);
+        
+        -- Obtener el último OrderID insertado
+        SET v_order_id = LAST_INSERT_ID();
+        
+        -- Insertar el detalle de la orden en la tabla OrderDetails
+        INSERT INTO OrderDetails (OrderID, ProductID, Quantity, UnitPrice)
+        VALUES (v_order_id, p_product_id, p_quantity, (SELECT UnitPrice FROM Products WHERE ProductID = p_product_id));
+        
+        -- Actualizar el stock del producto en la tabla Products
+        UPDATE Products
+        SET UnitsInStock = UnitsInStock - p_quantity
+        WHERE ProductID = p_product_id;
+    ELSE
+        -- Si el stock no es suficiente, cancelar la inserción
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Stock insuficiente para completar la venta';
+    END IF;
+END //
+
+
+CALL GestionarVenta(1, 5, 'ALFKI', '2024-07-05', '1234 Elm St', 'Seattle', '98101', 'USA');
+
+
+
+
+
+
+
+
+

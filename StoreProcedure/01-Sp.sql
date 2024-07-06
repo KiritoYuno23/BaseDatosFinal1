@@ -89,23 +89,31 @@ go
 -- realizar un proccedure que muestre un reporte de ventas por cliente y producto (agrupado), de un rango de fechas 
 
 
-create or ALTER PROCEDURE sp_reporteventas
--- parametros 
-    @fechainicio as INT,
-    @fechasalida as int 
-as 
+CREATE PROCEDURE sp_ReporteVentasPorClienteYProducto
+    @FechaInicio DATE,
+    @FechaFin DATE
+AS
 BEGIN
-    select *
-    from Customers as c 
-    INNER JOIN Orders as o 
-    on c.CustomerID = o.OrderID
-    INNER JOIN [Order Details] as od 
-    on od.OrderID = o.OrderID
-    WHERE o.OrderDate = @fechainicio and o.OrderDate = @fechasalida
-    GROUP by c.CompanyName   
-end
-go
+    SELECT 
+        c.CustomerName AS Cliente,
+        p.ProductName AS Producto,
+        SUM(sd.Quantity) AS CantidadTotal,
+        SUM(sd.TotalPrice) AS TotalVentas
+    FROM 
+        Sales s
+        INNER JOIN SalesDetails sd ON s.SaleID = sd.SaleID
+        INNER JOIN Customers c ON s.CustomerID = c.CustomerID
+        INNER JOIN Products p ON sd.ProductID = p.ProductID
+    WHERE 
+        s.SaleDate BETWEEN @FechaInicio AND @FechaFin
+    GROUP BY 
+        c.CustomerName, p.ProductName
+    ORDER BY 
+        c.CustomerName, p.ProductName;
+END;
 
+
+EXEC sp_ReporteVentasPorClienteYProducto '01-01-1978', '31-12-1978';
 
 --ejercicio 2: Realizar un procedure que inserete un cleinte nuevo
 
@@ -174,9 +182,6 @@ go
 SELECT *
 from Customers
 WHERE CustomerID = 'GTIG3'
-
-
-
 
 
 

@@ -300,7 +300,69 @@ on o.productoid = od.OrderID
 
 
 --Ejercicio 6: Listar el nombre del producto, la categoría del producto y el nombre del proveedor para cada producto.
+
+SELECT 
+    p.ProductName AS ProductName,
+    c.CategoryName AS Category,
+    s.CompanyName AS SupplierName
+FROM 
+    Products p
+JOIN 
+    Categories c ON p.CategoryID = c.CategoryID
+JOIN 
+    Suppliers s ON p.SupplierID = s.SupplierID;
+
 --Ejercicio 7: Obtener el nombre del cliente, el ID del pedido, el nombre del producto y la cantidad del producto para cada detalle del pedido.
+
+SELECT 
+    c.CompanyName AS CustomerName,
+    o.OrderID,
+    p.ProductName,
+    od.Quantity
+FROM 
+    Customers c
+JOIN 
+    Orders o ON c.CustomerID = o.CustomerID
+JOIN 
+    OrderDetails od ON o.OrderID = od.OrderID
+JOIN 
+    Products p ON od.ProductID = p.ProductID;
+
 --Ejercicio 8: Obtener el nombre del empleado, el nombre del territorio y la región del territorio para cada empleado que tiene asignado un territorio.
+
+SELECT 
+    CONCAT(e.FirstName, ' ', e.LastName) AS EmployeeName,
+    t.TerritoryDescription AS TerritoryName,
+    r.RegionDescription AS RegionName
+FROM 
+    Employees e
+JOIN 
+    EmployeeTerritories et ON e.EmployeeID = et.EmployeeID
+JOIN 
+    Territories t ON et.TerritoryID = t.TerritoryID
+JOIN 
+    Region r ON t.RegionID = r.RegionID;
+
 --Ejercicio 9: Mostrar el nombre del cliente, el nombre del transportista y el nombre del país del transportista para cada pedido enviado por un transportista.
+
+SELECT 
+    c.CompanyName AS CustomerName,
+    s.ShipperName AS ShipperName,
+    s.ShipperCountry AS ShipperCountry
+FROM 
+    Customers c
+JOIN 
+    Orders o ON c.CustomerID = o.CustomerID
+JOIN 
+    Shippers s ON o.ShipVia = s.ShipperID;
+
 --Ejercicio 10: Obtener el nombre del producto, el nombre de la categoría y la descripción de la categoría para cada producto que pertenece a una categoría.
+
+SELECT 
+    p.ProductName AS ProductName,
+    c.CategoryName AS CategoryName,
+    c.[Description] AS CategoryDescription
+FROM 
+    Products p
+JOIN 
+    Categories c ON p.CategoryID = c.CategoryID;
