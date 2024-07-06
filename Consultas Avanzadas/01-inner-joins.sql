@@ -156,8 +156,149 @@ on o.OrderID = od.OrderID
 where o.OrderDate between '1997-01-01' and '1998-02-28' 
 and c.CategoryName in ('Beverages'); 
 --Ejercicio 3: Listar el nombre del cliente, el ID del pedido y la fecha del pedido para cada pedido.
+
+
+SELECT c.CompanyName 'Nombre del cliente', o.OrderID 'Numero de orden', 
+YEAR(o.OrderDate) 'Año de compra',
+MONTH(o.OrderDate) 'Mes de compra',
+day(o.OrderDate) 'Dia de compra'
+from Customers as c 
+INNER JOIN [Orders] as o
+on c.CustomerID = o.CustomerID
+
+SELECT c.CompanyName 'Nombre del cliente', o.OrderID 'Numero de orden', 
+YEAR(o.OrderDate) 'Año de compra',
+MONTH(o.OrderDate) 'Mes de compra',
+day(o.OrderDate) 'Dia de compra'
+from (select CompanyName, CustomerID 
+from Customers) as c 
+INNER JOIN (select OrderID, CustomerID, OrderDate
+from Orders) as o
+on c.CustomerID = o.CustomerID
+
+
 --Ejercicio 4: Obtener el nombre del empleado, el título del cargo y el departamento del empleado para cada empleado.
+
+SELECT CONCAT(e.FirstName, ' ', e.LastName)'Nombre del empleado', 
+e.Title 'Cargo', t.TerritoryDescription 'Territorio'  
+FROM Employees as e
+INNER JOIN EmployeeTerritories as et 
+on e.EmployeeID = et.EmployeeID
+INNER join Territories as t 
+on t.TerritoryID = et.TerritoryID
+
+
+SELECT CONCAT(e.FirstName, ' ', e.LastName)'Nombre del empleado', 
+e.Title 'Cargo', t.TerritoryDescription 'Territorio'  
+FROM (select FirstName, LastName, EmployeeID, Title
+from Employees) as e
+INNER JOIN (select EmployeeID, TerritoryID
+from EmployeeTerritories) as et 
+on e.EmployeeID = et.EmployeeID
+INNER join (select TerritoryID, TerritoryDescription
+from Territories) as t 
+on t.TerritoryID = et.TerritoryID
+
+
 --Ejercicio 5: Mostrar el nombre del proveedor, el nombre del contacto y el teléfono del contacto para cada proveedor.
+
+SELECT  CompanyName 'proveedor', ContactName 'Contacto', Phone 'Telefono'
+from Suppliers
+
+SELECT  s.CompanyName 'proveedor', s.ContactName 'Contacto', s.Phone 'Telefono'
+from (select CompanyName, ContactName, Phone
+from  Suppliers) as s
+
+
+--Ejercico de reto
+--Selecionar todas las oredenes mostrando el empleado que la realizo, el cliente alq eu se le vendio,
+--Nombre de los productos, sus categorias, el precio en el que se vendio, unidades vendidas
+--y el importe para enero de 1997 a febrero de 1998
+SELECT * from [Orders]
+
+SELECT o.OrderID 'Numero de orden', 
+CONCAT(e.FirstName, ' ', e.LastName)'Nombre del empleado',
+c.CompanyName'Cliente', p.ProductName 'Nombre del Producto', p.UnitPrice 'Precio del producto'
+,ca.CategoryName 'Categoria', od.Quantity 'Cantidad'
+, (od.Quantity * od.UnitPrice) 'Importe'
+from Orders as o
+INNER join Employees as e 
+on o.EmployeeID = e.EmployeeID
+INNER join Customers as c 
+on c.CustomerID = o.CustomerID
+INNER JOIN [Order Details] as od
+on o.OrderID = od.OrderID
+INNER join Products as p 
+on p.ProductID = od.ProductID
+INNER join Categories as ca 
+on p.CategoryID = ca.CategoryID
+
+
+SELECT o.OrderID 'Numero de orden', 
+CONCAT(e.FirstName, ' ', e.LastName)'Nombre del empleado',
+c.CompanyName'Cliente', p.ProductName 'Nombre del Producto', p.UnitPrice 'Precio del producto'
+,ca.CategoryName 'Categoria', od.Quantity 'Cantidad'
+, (od.Quantity * od.UnitPrice) 'Importe'
+from Orders as o
+INNER join Employees as e 
+on o.EmployeeID = e.EmployeeID
+INNER join Customers as c 
+on c.CustomerID = o.CustomerID
+INNER JOIN [Order Details] as od
+on o.OrderID = od.OrderID
+INNER join Products as p 
+on p.ProductID = od.ProductID
+INNER join Categories as ca 
+on p.CategoryID = ca.CategoryID
+WHERE o.OrderDate BETWEEN '1997-01-01' and '1998-02-28'
+
+
+SELECT o.OrderID 'Numero de orden', 
+CONCAT(e.FirstName, ' ', e.LastName)'Nombre del empleado',
+c.CompanyName'Cliente', p.ProductName 'Nombre del Producto', p.UnitPrice 'Precio del producto'
+,ca.CategoryName 'Categoria', od.Quantity 'Cantidad'
+, (od.Quantity * od.UnitPrice) 'Importe'
+from Orders as o
+INNER join Employees as e 
+on o.EmployeeID = e.EmployeeID
+INNER join Customers as c 
+on c.CustomerID = o.CustomerID
+INNER JOIN [Order Details] as od
+on o.OrderID = od.OrderID
+INNER join Products as p 
+on p.ProductID = od.ProductID
+INNER join Categories as ca 
+on p.CategoryID = ca.CategoryID
+WHERE o.OrderDate BETWEEN '1997-01-01' and '1998-02-28'
+and ca.CategoryName in ('Beverages')
+ORDER by c.CompanyName
+
+-- vendido de la categoria beverages
+SELECT (od.Quantity * od.UnitPrice) 'Importe'
+from Orders as o
+INNER join Employees as e 
+on o.EmployeeID = e.EmployeeID
+INNER join Customers as c 
+on c.CustomerID = o.CustomerID
+INNER JOIN [Order Details] as od
+on o.OrderID = od.OrderID
+INNER join Products as p 
+on p.ProductID = od.ProductID
+INNER join Categories as ca 
+on p.CategoryID = ca.CategoryID
+WHERE o.OrderDate BETWEEN '1997-01-01' and '1998-02-28'
+and ca.CategoryName in ('Beverages')
+ORDER by c.CompanyName
+
+SELECT sum(od.UnitPrice * od.Quantity) 'Total de ventas'
+from Categories as c 
+INNER join Products as p 
+on p.CategoryID = c.CategoryID
+INNER JOIN [Order Details] as od
+on o.productoid = od.OrderID
+
+
+
 --Ejercicio 6: Listar el nombre del producto, la categoría del producto y el nombre del proveedor para cada producto.
 --Ejercicio 7: Obtener el nombre del cliente, el ID del pedido, el nombre del producto y la cantidad del producto para cada detalle del pedido.
 --Ejercicio 8: Obtener el nombre del empleado, el nombre del territorio y la región del territorio para cada empleado que tiene asignado un territorio.
