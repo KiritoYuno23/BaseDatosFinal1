@@ -1,0 +1,32 @@
+[33mcommit eb0fb581f1c0b751d4e0a0ef2d0a0e628f6409a4[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Aldo Alexis Meza Arguelles <alexisarmz23@gmail.com>
+Date:   Fri Jul 5 23:12:53 2024 -0600
+
+    revicion final
+
+[33mcommit c07e69772e6d8c18a41086445fbd3527be922e07[m
+Author: Aldo Alexis Meza Arguelles <alexisarmz23@gmail.com>
+Date:   Fri Jul 5 22:47:58 2024 -0600
+
+    Se agragaron los trabajos faltantes
+    y se acomodaron los Query en sus
+    respectivas carperas
+
+[33mcommit ab04138e1c4f124b7067bf5ffd2a7b67adfefd01[m
+Author: Aldo Alexis Meza Arguelles <alexisarmz23@gmail.com>
+Date:   Fri Jul 5 10:35:25 2024 -0600
+
+    Se agrego un .gitignore
+
+[33mcommit 2e1569dddd113a09abe1a6799573cc5815a7b5c1[m
+Author: Aldo Alexis Meza Arguelles <alexisarmz23@gmail.com>
+Date:   Fri Jul 5 10:04:03 2024 -0600
+
+    Se realizo un cambio en el archivo READMI.md se
+    agrego una imagen representativa de base de datos
+
+[33mcommit 30b630d17513f3a6400d82fb09149f48f64f0803[m
+Author: Aldo Alexis Meza Arguelles <alexisarmz23@gmail.com>
+Date:   Fri Jul 5 09:41:20 2024 -0600
+
+    Manipulacion Avanzada: Terminada
